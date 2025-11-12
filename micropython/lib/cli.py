@@ -17,6 +17,7 @@ class CLI:
         command = parts[0]
         args = parts[1:]
         if command in self.commands:
+            # This is a simple parser, we'll need to improve it for flags
             self.commands[command](*args)
         else:
             print(f"Unknown command: {command}")
@@ -29,6 +30,9 @@ def help_command():
     print("  set_static_ip <ip> <subnet> <gateway> <dns> - Set a static IP address")
     print("  set_dhcp - Use DHCP")
     print("  ping <host> - Send ICMP echo requests to a host")
+    print("  tcp <host> <port> [flags] - Send a TCP packet (e.g., tcp google.com 80 S)")
+    print("  udp <host> <port> [payload] - Send a UDP packet")
+    print("  scan <host> [ports] - Scan a host for open ports (e.g., scan google.com 1-1024)")
 
 
 def set_wifi_command(ssid, password):
@@ -46,6 +50,15 @@ def set_dhcp_command():
 def ping_command(host):
     hping.ping(host)
 
+def tcp_command(host, port, flags="S"):
+    hping.tcp(host, int(port), flags)
+
+def udp_command(host, port, payload="hping-micropython"):
+    hping.udp(host, int(port), payload)
+
+def scan_command(host, ports="1-1024"):
+    hping.scan(host, ports)
+
 def main():
     cli = CLI()
     cli.register("help", help_command)
@@ -54,6 +67,9 @@ def main():
     cli.register("set_static_ip", set_static_ip_command)
     cli.register("set_dhcp", set_dhcp_command)
     cli.register("ping", ping_command)
+    cli.register("tcp", tcp_command)
+    cli.register("udp", udp_command)
+    cli.register("scan", scan_command)
     while True:
         try:
             command_line = input("> ")
