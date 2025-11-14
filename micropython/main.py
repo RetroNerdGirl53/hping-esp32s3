@@ -1,5 +1,5 @@
 # main.py
-from lib.cli import CLI, help_command, set_wifi_command, connect_wifi_command, set_static_ip_command, set_dhcp_command, ping_command, tcp_command, udp_command, scan_command, traceroute_command
+from lib import cli
 
 def main():
     """
@@ -8,22 +8,25 @@ def main():
     print("Starting hping3 port for MicroPython")
     print("Type 'help' for a list of commands.")
 
-    cli = CLI()
-    cli.register("help", help_command)
-    cli.register("set_wifi", set_wifi_command)
-    cli.register("connect_wifi", connect_wifi_command)
-    cli.register("set_static_ip", set_static_ip_command)
-    cli.register("set_dhcp", set_dhcp_command)
-    cli.register("ping", ping_command)
-    cli.register("traceroute", traceroute_command)
-    cli.register("tcp", tcp_command)
-    cli.register("udp", udp_command)
-    cli.register("scan", scan_command)
+    c = cli.CLI()
+    c.register("help", cli.help_command)
+    c.register("set_wifi", cli.set_wifi_command)
+    c.register("connect_wifi", cli.connect_wifi_command)
+    c.register("set_static_ip", cli.set_static_ip_command)
+    c.register("set_dhcp", cli.set_dhcp_command)
+    c.register("discover", cli.discover_command)
+    c.register("profile", cli.profile_command)
+    c.register("ping", cli.ping_command)
+    c.register("tcping", cli.tcping_command)
+    c.register("traceroute", cli.traceroute_command)
+    c.register("tcp", cli.tcp_command)
+    c.register("udp", cli.udp_command)
+    c.register("scan", cli.scan_command)
 
     while True:
         try:
             command_line = input("> ")
-            cli.execute(command_line)
+            c.execute(command_line)
         except KeyboardInterrupt:
             print("\nExiting...")
             break
