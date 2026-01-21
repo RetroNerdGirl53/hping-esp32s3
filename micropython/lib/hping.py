@@ -171,7 +171,7 @@ def ping(host, count=4, timeout=1):
 
     print(f"Pinging {host} [{addr}] with 32 bytes of data:")
 
-    with socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP) as s:
+    with socket.socket(socket.AF_INET, socket.SOCK_RAW, 1) as s:
         s.settimeout(timeout)
         sequence_number = 0
         for _ in range(count):
